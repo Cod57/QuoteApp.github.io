@@ -1,1 +1,165 @@
-hello this is first html file for git repo
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Random Quotes Generater</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Cookie&family=Kaushan+Script&family=The+Nautigal:wght@700&display=swap');
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		html,body{
+			width: 100%;
+			height: 100vh;
+			overflow: hidden;
+			position: relative;
+			background-color: #536dfe;
+			font-family: 'Cookie', cursive;
+		}
+		i.fa-quote-left{
+			font-size: 3rem;
+			color: #536dfe;
+			padding: 1rem 2rem;
+		}
+		div.twitter-icon{
+			text-align: right;
+		}
+		div span{
+			display: inline-block;
+		    width: 200px;
+		    height: 75px;
+		    transform: rotate(45deg);
+		    background: #536dfeab;
+		    position: absolute;
+		    right: -75px;
+		    top: -7px;
+		    z-index: -1;
+		}
+		i.fa-twitter{
+			font-size: 2rem;
+		    color: #536dfe;
+		    padding: 1rem 1rem;
+		    transition: all 1s ease-in-out;
+		    cursor: pointer;
+		}
+		i.fa-twitter:hover{
+			color: #fff;
+		}
+		.main-quotes{
+			width: 40%;
+			height: auto;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: rgba(255,255,255,.8);
+			border-radius: 10px;
+		}
+		#quotes{
+			padding: 1rem 2rem;
+			font-size: 2.5rem;
+			color: #536dfe;
+		}
+		#auth{
+			padding: 2rem;
+			text-align: right;
+			color: #536dfe;
+			font-size: 1.5rem;
+		}
+		button{
+			width: 100%;
+			padding: 1rem;
+			text-align: center;
+			border: none;
+			background-color: rgb(43,111,164,.8);
+			color: #fff;
+			border-bottom-left-radius: 10px;
+			border-top-right-radius: 10px;
+			cursor: pointer;
+			transition: all 1s ease-in-out;
+		}
+		button:hover,
+		button:focus,
+		button:active{
+			background-color: rgb(43,111,164,1);
+			outline: none;
+		}
+		@media (max-width: 768px){
+			.main-quotes{
+				width: 80%;
+			}
+			#quotes{
+				font-size: 2rem;
+			}
+		}
+	</style>
+</head>
+<body>
+
+	<div class="main-quotes">
+		<div class="twitter-icon">
+			<span></span>
+			<i class="fa fa-twitter" id="fa-twitter"></i>
+		</div>
+		<div class="quote-icon">
+			<i class="fa fa-quote-left"></i>
+		</div>		
+		<div id="quotes"></div>
+		<div id="auth"></div>
+		<button id="getNewQuotes">Get Quotes</button>
+	</div>
+
+
+
+	<script>
+
+	let orgQuote = document.getElementById('quotes');
+	let orgAuth = document.getElementById('auth');
+	let getNewQuotes = document.getElementById('getNewQuotes');
+	let tweet = document.getElementById('fa-twitter');
+	let newQuote = '';
+	let rNum;
+
+	const tweetNow = () => {
+		let opTweet = `https://twitter.com/intent/tweet?text=${newQuote[rNum].text} ${newQuote[rNum].author}`;
+		window.open(opTweet);
+	};
+
+	const getNewQuote = () => {
+		rNum = Math.round(Math.random() * newQuote.length);
+		// console.log(rNum);
+		orgQuote.innerText = `${newQuote[rNum].text}`;
+		// orgAuth.innerText = `${newQuote[rNum].author}`;
+		newQuote[rNum].author == null 
+		? (orgAuth.innerText = "unknown") 
+		: (orgAuth.innerText = `${newQuote[rNum].author}`);
+	};
+
+	const getQuotes = async () => {
+		var api = 'https://type.fit/api/quotes';
+		try{
+
+			const Quote = await fetch(api);
+			newQuote = await Quote.json();
+			getNewQuote();
+			// console.log(newQuote.length);
+
+		} catch(error) {}
+	};
+
+	getQuotes();
+
+	tweet.addEventListener("click", tweetNow);
+
+	getNewQuotes.addEventListener("click", () => {
+		getNewQuote();
+	});
+
+		
+	</script>
+</body>
+</html>
